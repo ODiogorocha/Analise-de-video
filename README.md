@@ -4,8 +4,6 @@
 
 Este projeto é uma solução avançada para a análise e comparação de vídeos, focada em movimentos corporais. Utilizando **MediaPipe** para detecção de pontos-chave e **OpenCV** para visualização, o código é capaz de processar dois vídeos simultaneamente, destacar as diferenças nas trajetórias dos pontos-chave e fornecer uma visualização clara e útil para análise de movimentos.
 
-![Visualização do Projeto](![imagem](https://github.com/user-attachments/assets/f4e69ac7-6ee3-4abf-947b-95f44c02b48a)
-)
 
 ## Funcionalidades
 
