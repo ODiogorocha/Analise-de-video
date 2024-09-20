@@ -44,20 +44,15 @@ def draw_silhouette_and_keypoints(image, landmarks):
         y = int(landmark.y * height)
         cv2.circle(image, (x, y), 5, (0, 255, 0), -1)  # Verde (BGR)
 
-# Função para processar o vídeo
-def process_video_with_shadow(video_path, output_path1, output_path2):
-    cap = cv2.VideoCapture(video_path)
+# Função para processar o vídeo da câmera
+def process_camera():
+    cap = cv2.VideoCapture(0)  # Abre a câmera (0 para câmera padrão)
 
     if not cap.isOpened():
-        print(f"Erro ao abrir o vídeo {video_path}")
+        print("Erro ao acessar a câmera")
         return
 
-    # Cria objetos VideoWriter para salvar os vídeos de saída
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out1 = cv2.VideoWriter(output_path1, fourcc, 30.0, (int(cap.get(3)), int(cap.get(4))))
-    out2 = cv2.VideoWriter(output_path2, fourcc, 30.0, (int(cap.get(3)), int(cap.get(4))))
-
-    while cap.isOpened():
+    while True:
         ret, frame = cap.read()
         if not ret:
             break
@@ -73,31 +68,14 @@ def process_video_with_shadow(video_path, output_path1, output_path2):
             frame_with_silhouette = frame.copy()
             draw_silhouette_and_keypoints(frame_with_silhouette, landmarks)
 
-            # Cria a imagem de "sombra" (somente a silhueta em fundo preto)
-            silhouette_frame = frame.copy()
-            silhouette_frame[:] = (0, 0, 0)  # Fundo preto
-            draw_silhouette_and_keypoints(silhouette_frame, landmarks)
-
-            # Mostra os dois frames: original com silhueta e a sombra
-            cv2.imshow('Original Video with Silhouette and Landmarks', frame_with_silhouette)
-            cv2.imshow('Shadow Video with Silhouette Only', silhouette_frame)
-
-            # Salva os frames com a silhueta e a sombra (somente a silhueta)
-            out1.write(frame_with_silhouette)  # Vídeo original com silhueta azul e pontos verdes
-            out2.write(silhouette_frame)  # Vídeo sombra com a silhueta
+            # Mostra o frame com a silhueta
+            cv2.imshow('Camera with Silhouette and Landmarks', frame_with_silhouette)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     cap.release()
-    out1.release()
-    out2.release()
     cv2.destroyAllWindows()
 
-# Caminhos para o vídeo a ser analisado e os arquivos de saída
-video_path = 'video.mp4'
-output_path1 = 'output_with_silhouette.mp4'  # Vídeo original com silhueta azul e pontos verdes
-output_path2 = 'output_shadow_silhouette.mp4'  # Vídeo apenas com a silhueta (sombra)
-
-# Processa o vídeo e salva o resultado com a silhueta e a sombra
-process_video_with_shadow(video_path, output_path1, output_path2)
+# Inicia o processamento da câmera
+process_camera()
